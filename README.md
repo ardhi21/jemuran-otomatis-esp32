@@ -160,6 +160,21 @@ Gunakan checklist ini setelah upload pertama dan setelah mengubah arah atau juml
 
 Jika motor macet, hentikan daya dan kembalikan jemuran ke posisi luar sebelum mengulang uji. Sketch memakai jumlah langkah sebagai perkiraan posisi. Pengujian panjang tarikan dilakukan dengan mengamati posisi fisik karena rangkaian ini belum memakai limit switch.
 
+## Pencatatan hasil pengujian
+
+Isi satu baris untuk setiap gerakan masuk atau keluar. Catat arah putaran yang diamati dari sisi poros, nilai `langkahPerGerakan` yang di-upload, dan panjang perpindahan jemuran yang diukur dalam sentimeter. Kolom catatan dapat digunakan untuk menulis beban uji, kecepatan RPM, atau kendala seperti motor macet dan tali selip.
+
+| Tanggal / uji | Kondisi sensor (basah/kering) | Gerakan (masuk/keluar) | Arah putaran yang diamati | Jumlah langkah diperintahkan | Panjang tarikan terukur (cm) | Hasil / catatan |
+| --- | --- | --- | --- | ---: | ---: | --- |
+| | | | | | | |
+| | | | | | | |
+| | | | | | | |
+| | | | | | | |
+| | | | | | | |
+| | | | | | | |
+
+Jumlah langkah diperintahkan mengikuti nilai pada sketch. Panjang tarikan diisi dari pengukuran fisik setelah gerakan selesai agar hasil kalibrasi dapat dibandingkan antarpercobaan.
+
 ## Uji gerakan jemuran
 
 1. Basahi pelat dan periksa putaran dari sisi poros. Jika gerakan masuk searah jarum jam, ubah `arahMasuk` dari `-1` ke `1`, lalu upload ulang. Keringkan pelat untuk menguji arah keluar.
