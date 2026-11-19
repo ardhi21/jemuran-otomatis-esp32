@@ -175,6 +175,17 @@ Isi satu baris untuk setiap gerakan masuk atau keluar. Catat arah putaran yang d
 
 Jumlah langkah diperintahkan mengikuti nilai pada sketch. Panjang tarikan diisi dari pengukuran fisik setelah gerakan selesai agar hasil kalibrasi dapat dibandingkan antarpercobaan.
 
+### Contoh pengisian
+
+**Data berikut hanya contoh untuk menunjukkan cara mengisi tabel. Angka ini merupakan ilustrasi dan belum berasal dari pengujian perangkat.** Gunakan hasil pengukuran pada prototipe untuk menentukan jumlah langkah dan panjang tarikan yang sesuai.
+
+| Tanggal / uji | Kondisi sensor (basah/kering) | Gerakan (masuk/keluar) | Arah putaran yang diamati | Jumlah langkah diperintahkan | Panjang tarikan terukur (cm) | Hasil / catatan |
+| --- | --- | --- | --- | ---: | ---: | --- |
+| Contoh / 1 | Basah | Masuk | Berlawanan arah jarum jam | 4096 | 20 | Contoh gerakan masuk, kecepatan 10 RPM |
+| Contoh / 2 | Kering | Keluar | Searah jarum jam | 4096 | 20 | Contoh gerakan kembali ke posisi luar, kecepatan 10 RPM |
+
+Pada contoh ini, setiap baris mewakili satu gerakan. Panjang 20 cm hanya angka ilustrasi dan perlu diganti dengan hasil ukur. Hubungan jumlah langkah dan perpindahan bergantung pada mekanisme penarik tali yang digunakan.
+
 ## Uji gerakan jemuran
 
 1. Basahi pelat dan periksa putaran dari sisi poros. Jika gerakan masuk searah jarum jam, ubah `arahMasuk` dari `-1` ke `1`, lalu upload ulang. Keringkan pelat untuk menguji arah keluar.
