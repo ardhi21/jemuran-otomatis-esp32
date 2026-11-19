@@ -78,6 +78,28 @@ Pastikan paket board ESP32 dan library Stepper sudah terpasang sesuai bagian **A
 
 Setelah upload berhasil, program tersimpan di ESP32 dan berjalan kembali setiap kali papan mendapat daya. Upload ulang setiap kali sketch diubah.
 
+## Troubleshooting upload ESP32
+
+### Port ESP32 tidak muncul
+
+1. Coba kabel USB data lain dan port USB lain. Sambungkan langsung ke komputer jika memungkinkan, lalu cabut dan pasang kembali ESP32. Periksa indikator daya.
+2. Buka kembali **Tools → Port** untuk memperbarui daftar. Di macOS, periksa **System Information → Hardware → USB**. Di Windows, periksa **Device Manager**. Bandingkan daftar saat papan dicabut dan dipasang untuk mengenali perangkat ESP32.
+3. Jika komputer mendeteksi perangkat USB tetapi port serial belum tersedia, identifikasi chip USB-to-UART pada papan, misalnya CP210x atau CH340/CH341. Instal driver yang sesuai dari produsen chip jika diperlukan. Panduan koneksi Espressif menyediakan tautan driver CP210x dan FTDI.
+4. Jika port muncul sebagai **Unknown**, pilih port tersebut dan tentukan **ESP32 Dev Module** secara manual. Periksa kembali port setelah papan disambungkan ulang.
+
+Rujukan langkah deteksi perangkat dan driver tersedia di [panduan Arduino](https://support.arduino.cc/hc/en-us/articles/4412955149586-If-your-board-is-not-detected-by-Arduino-IDE) dan [panduan koneksi serial Espressif](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/establish-serial-connection.html).
+
+### Upload berhenti di “Connecting…”
+
+1. Pastikan **Tools → Board** memakai **ESP32 Dev Module** dan **Tools → Port** memakai port papan yang terhubung.
+2. Tutup Serial Monitor, Serial Plotter, serta aplikasi terminal lain yang memakai port ESP32, lalu ulangi **Upload**.
+3. Jika tetap berhenti di **Connecting…**, masuk ke mode download secara manual. Tahan tombol **BOOT**, tekan dan lepaskan **EN/RESET** satu kali, lalu lepaskan **BOOT**. Klik **Upload** kembali.
+4. Jika koneksi masih gagal atau penulisan terputus, pilih **Tools → Upload Speed → 115200** dan ulangi upload. Pengaturan ini mengatur kecepatan upload. Serial Monitor untuk sketch ini juga diatur ke 115200 baud.
+5. Jika masih gagal, cabut USB dan matikan catu motor sebelum melepas kabel sensor serta ULN2003 dari ESP32. Sambungkan kembali ESP32 ke USB saja dan coba upload untuk memeriksa apakah rangkaian eksternal mengganggu koneksi atau kestabilan daya.
+6. Setelah berhasil, matikan daya sebelum memasang kembali kabel sesuai diagram. Posisikan jemuran di luar sebelum menyalakan kembali sistem. Jika program belum berjalan setelah upload manual, tekan **EN/RESET** satu kali dengan **BOOT** dilepas.
+
+Panduan ini mengikuti [troubleshooting esptool](https://docs.espressif.com/projects/esptool/en/latest/esp32/troubleshooting.html) dan [langkah mode download manual Espressif](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/establish-serial-connection.html).
+
 ## Uji gerakan jemuran
 
 1. Basahi pelat dan periksa putaran dari sisi poros. Jika gerakan masuk searah jarum jam, ubah `arahMasuk` dari `-1` ke `1`, lalu upload ulang. Keringkan pelat untuk menguji arah keluar.
