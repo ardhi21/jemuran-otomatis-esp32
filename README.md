@@ -100,6 +100,30 @@ Rujukan langkah deteksi perangkat dan driver tersedia di [panduan Arduino](https
 
 Panduan ini mengikuti [troubleshooting esptool](https://docs.espressif.com/projects/esptool/en/latest/esp32/troubleshooting.html) dan [langkah mode download manual Espressif](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/establish-serial-connection.html).
 
+## Troubleshooting sensor dan motor
+
+Matikan USB dan catu motor sebelum mengubah sambungan kabel. Untuk pengujian gerakan, lepas tali dan gunakan jumlah langkah kecil agar kondisi sensor dan motor mudah diamati.
+
+### Sensor hujan tidak merespons
+
+1. Periksa sambungan pelat ke modul sensor, lalu pastikan `VCC → 3V3`, `GND → GND`, dan `DO → GPIO14`. Gunakan modul yang mendukung suplai 3,3 V serta level sinyal yang sesuai ESP32.
+2. Teteskan air pada jalur logam pelat dan keringkan kembali. Jika modul memiliki trimpot sensitivitas, putar sedikit demi sedikit sampai keluaran digital berubah antara kondisi basah dan kering. Amati LED status jika tersedia.
+3. Buka Serial Monitor pada **115200 baud** sebelum membasahi pelat. Sketch mengharapkan `LOW (0)` saat basah dan `HIGH (1)` saat kering. Untuk melihat bacaan mentah, tambahkan sementara `Serial.println(bacaan);` tepat setelah baris `const int bacaan = digitalRead(pinHujan);`, lalu upload ulang. Setelah pemeriksaan, hapus baris diagnostik tersebut dan upload kembali.
+4. Jika bacaan tetap sama, cek ulang kabel DO dan GND, atur sensitivitas, serta bersihkan dan keringkan pelat. Jika bacaan terbalik, sesuaikan kedua kondisi LOW/HIGH pada sketch dengan hasil pengukuran modul.
+5. Jika bacaan berubah tetapi motor diam, cek status posisi. Saat awal menyala, kondisi kering tidak memicu gerakan karena jemuran sudah dicatat berada di luar. Uji urutan **basah → motor masuk → kering → motor keluar**. Setiap kondisi harus bertahan minimal **500 ms**. Sensor dibaca kembali setelah gerakan motor selesai.
+6. Jika Serial Monitor menampilkan pesan gerakan tetapi poros tidak berputar, lanjutkan pemeriksaan motor di bawah.
+
+Pengaturan sensitivitas melalui trimpot dan perbedaan DO/AO dijelaskan pada [panduan modul sensor hujan HandsOn Tech](https://handsontec.com/index.php/product/rain-drop-sensor-module/). Cocokkan spesifikasi dengan modul yang digunakan.
+
+### Motor hanya bergetar dan tidak berputar
+
+1. Periksa label input ULN2003 dan kabel ESP32. Sambungan harus mengikuti `GPIO26 → IN1`, `GPIO25 → IN2`, `GPIO33 → IN3`, dan `GPIO32 → IN4`. Pastikan steker 5 pin motor terpasang penuh.
+2. Pertahankan urutan argumen pada sketch, yaitu `Stepper motor(langkahPerPutaran, pinIN1, pinIN3, pinIN2, pinIN4);`. Urutan fase yang salah atau satu sambungan yang terputus perlu diperiksa saat motor hanya bergetar.
+3. Untuk motor berlabel **5 V**, periksa catu 5 V eksternal ke terminal `+ / VCC` ULN2003 dan satukan GND catu, driver, serta ESP32. Gunakan catu dengan kemampuan arus sesuai motor dan ukur apakah tegangannya turun saat motor bergerak. Suplai motor mengikuti diagram kabel.
+4. Uji tanpa beban tali. Ubah sementara `kecepatanRPM` dari `10` menjadi `5` dan `langkahPerGerakan` menjadi `256`, lalu upload ulang. Jika motor berputar tanpa beban, periksa gesekan mekanik, ketegangan tali, dan kemampuan motor menarik beban sebelum mengkalibrasi kembali langkah.
+5. Jika masih bergetar, matikan daya lalu periksa kabel yang longgar atau putus. Coba kabel pengganti, modul ULN2003 lain, atau motor lain secara bergantian untuk menemukan komponen penyebabnya.
+6. Setelah satu perintah selesai, kode mencatat posisi baru meskipun motor macet. Untuk mengulang dari kondisi awal, posisikan jemuran di luar dan reset ESP32. Ubah `arahMasuk` jika arah putaran terbalik setelah motor sudah dapat berputar.
+
 ## Uji gerakan jemuran
 
 1. Basahi pelat dan periksa putaran dari sisi poros. Jika gerakan masuk searah jarum jam, ubah `arahMasuk` dari `-1` ke `1`, lalu upload ulang. Keringkan pelat untuk menguji arah keluar.
