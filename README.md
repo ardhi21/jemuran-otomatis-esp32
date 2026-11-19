@@ -124,6 +124,42 @@ Pengaturan sensitivitas melalui trimpot dan perbedaan DO/AO dijelaskan pada [pan
 5. Jika masih bergetar, matikan daya lalu periksa kabel yang longgar atau putus. Coba kabel pengganti, modul ULN2003 lain, atau motor lain secara bergantian untuk menemukan komponen penyebabnya.
 6. Setelah satu perintah selesai, kode mencatat posisi baru meskipun motor macet. Untuk mengulang dari kondisi awal, posisikan jemuran di luar dan reset ESP32. Ubah `arahMasuk` jika arah putaran terbalik setelah motor sudah dapat berputar.
 
+## Checklist pengujian awal
+
+Gunakan checklist ini setelah upload pertama dan setelah mengubah arah atau jumlah langkah. Amati arah putaran dari sisi poros motor.
+
+### Persiapan
+
+- [ ] Sambungan kabel dan GND bersama sudah sesuai diagram. Tegangan catu motor sesuai label motor.
+- [ ] Untuk uji sensor dan arah, tali dilepas, `langkahPerGerakan = 256`, dan perubahan sudah di-upload.
+- [ ] Jemuran diposisikan di luar sebelum ESP32 dinyalakan atau direset.
+- [ ] Serial Monitor dibuka pada **115200 baud**.
+
+### Sensor basah dan kering
+
+- [ ] Saat awal menyala dengan pelat kering, motor tetap diam karena posisi awal tercatat di luar.
+- [ ] Setelah pelat dibasahi dan bacaan stabil minimal 500 ms, muncul pesan **Sensor basah. Menarik jemuran masuk.** dan motor bergerak satu kali.
+- [ ] Selama pelat tetap basah setelah gerakan selesai, motor tidak mengulang gerakan masuk.
+- [ ] Setelah pelat benar-benar kering dan bacaan stabil minimal 500 ms, muncul pesan **Sensor kering. Mengeluarkan jemuran.** dan motor bergerak satu kali.
+- [ ] Selama pelat tetap kering setelah gerakan selesai, motor tidak mengulang gerakan keluar.
+
+### Arah putaran motor
+
+- [ ] Saat basah, poros berputar **berlawanan arah jarum jam** untuk menarik jemuran masuk.
+- [ ] Saat kering, poros berputar **searah jarum jam** untuk mengeluarkan jemuran.
+- [ ] Jika arah terbalik, `arahMasuk` sudah diubah dari `-1` menjadi `1` atau sebaliknya, di-upload ulang, dan kedua arah diuji kembali.
+
+### Panjang tarikan jemuran
+
+- [ ] Daya dimatikan sebelum tali dipasang kembali. Jalur tali dan mekanisme dapat bergerak bebas.
+- [ ] Jemuran diposisikan di luar sebelum menyalakan kembali sistem. Jumlah langkah dimulai dari nilai kecil dan ditambah bertahap melalui `langkahPerGerakan`, lalu di-upload ulang.
+- [ ] Saat pelat dibasahi, jemuran masuk sampai posisi yang diinginkan tanpa menabrak ujung lintasan atau menarik tali terlalu kencang.
+- [ ] Setelah gerakan masuk selesai dan pelat dikeringkan, jemuran kembali ke posisi luar yang diinginkan.
+- [ ] Beberapa siklus basah–kering menghasilkan posisi masuk dan keluar yang konsisten pada beban pengujian, tanpa motor macet atau tali selip.
+- [ ] Nilai akhir `arahMasuk`, `langkahPerGerakan`, dan `kecepatanRPM` sudah disimpan di sketch dan di-upload ke ESP32.
+
+Jika motor macet, hentikan daya dan kembalikan jemuran ke posisi luar sebelum mengulang uji. Sketch memakai jumlah langkah sebagai perkiraan posisi. Pengujian panjang tarikan dilakukan dengan mengamati posisi fisik karena rangkaian ini belum memakai limit switch.
+
 ## Uji gerakan jemuran
 
 1. Basahi pelat dan periksa putaran dari sisi poros. Jika gerakan masuk searah jarum jam, ubah `arahMasuk` dari `-1` ke `1`, lalu upload ulang. Keringkan pelat untuk menguji arah keluar.
