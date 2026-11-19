@@ -60,11 +60,27 @@ Kompilasi untuk `esp32:esp32:esp32` berhasil tanpa error atau peringatan menggun
 | Flash program | 272.848 byte (20%) | 1.310.720 byte |
 | RAM untuk variabel global | 22.164 byte (6%) | 327.680 byte |
 
-## Unggah dan uji
+## Upload kode ke ESP32
 
-1. Sambungkan ESP32 melalui USB, lalu pilih **ESP32 Dev Module** dan port yang sesuai di Arduino IDE.
-2. Untuk uji arah, lepas tali dan ubah `langkahPerGerakan` menjadi `256` sebelum mengunggah sketch. Buka Serial Monitor pada 115200 baud.
-3. Basahi pelat dan periksa putaran dari sisi poros. Jika gerakan masuk searah jarum jam, ubah `arahMasuk` dari `-1` ke `1`, lalu unggah ulang. Keringkan pelat untuk menguji arah keluar.
-4. Setelah arah sesuai, pasang tali dan kalibrasi jumlah langkah untuk panjang tarikan. Posisikan jemuran di luar setiap kali ESP32 dinyalakan atau direset.
+Pastikan paket board ESP32 dan library Stepper sudah terpasang sesuai bagian **Arduino IDE** di atas.
+
+| Tombol Arduino IDE | Fungsi |
+| --- | --- |
+| **Verify** (ikon centang) | Mengompilasi sketch untuk memeriksa error. Bisa dijalankan tanpa papan terhubung. |
+| **Upload** (ikon panah kanan) | Mengompilasi sketch, lalu menulis program ke memori ESP32 melalui USB. |
+
+1. Sambungkan ESP32 ke komputer dengan kabel USB yang mendukung transfer data.
+2. Buka [jemuran-otomatis-esp32.ino](jemuran-otomatis-esp32.ino) di Arduino IDE.
+3. Pilih **ESP32 Dev Module** pada **Tools → Board**, lalu pilih port ESP32 pada **Tools → Port**.
+4. Untuk uji pertama, lepas tali dan ubah `langkahPerGerakan` menjadi `256`. Posisikan jemuran di luar karena kode menganggap posisi tersebut sebagai kondisi awal.
+5. Klik **Upload** dan tunggu sampai Arduino IDE menampilkan bahwa upload selesai. Program akan mulai berjalan setelah ESP32 reset.
+6. Buka Serial Monitor pada **115200 baud** untuk melihat pesan sensor dan gerakan jemuran.
+
+Setelah upload berhasil, program tersimpan di ESP32 dan berjalan kembali setiap kali papan mendapat daya. Upload ulang setiap kali sketch diubah.
+
+## Uji gerakan jemuran
+
+1. Basahi pelat dan periksa putaran dari sisi poros. Jika gerakan masuk searah jarum jam, ubah `arahMasuk` dari `-1` ke `1`, lalu upload ulang. Keringkan pelat untuk menguji arah keluar.
+2. Setelah arah sesuai, pasang tali dan kalibrasi `langkahPerGerakan` untuk panjang tarikan, lalu upload ulang. Posisikan jemuran di luar setiap kali ESP32 dinyalakan atau direset.
 
 Sketch menghitung langkah yang diperintahkan dan menyimpan status posisi di RAM. Jika motor macet atau ESP32 reset di tengah gerakan, posisi fisik bisa berbeda dari status di kode. Selama `motor.step()` berlangsung, pembacaan sensor dijeda.
